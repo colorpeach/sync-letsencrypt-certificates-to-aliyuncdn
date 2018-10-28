@@ -1,0 +1,30 @@
+{
+  "name": "sync-letsencrypt-certificates-to-aliyuncdn",
+  "version": "1.0.0",
+  "description": "将自己阿里云服务器上通过`let's encrypt`生成的证书同步到阿里云的CDN配置中。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colorpeach/sync-letsencrypt-certificates-to-aliyuncdn.git"
+  },
+  "keywords": [
+    "letsencrypt",
+    "certificates",
+    "aliyun",
+    "cdn"
+  ],
+  "author": "colorpeach@live.cn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colorpeach/sync-letsencrypt-certificates-to-aliyuncdn/issues"
+  },
+  "homepage": "https://github.com/colorpeach/sync-letsencrypt-certificates-to-aliyuncdn#readme",
+  "dependencies": {
+    "aliyun-sdk": "^1.11.10",
+    "dotenv": "^6.1.0",
+    "node-schedule": "^1.3.0"
+  }
+}
