@@ -18,9 +18,13 @@ function md5 (str) {
     return crypto.createHash('md5').update(str).digest('hex');
 }
 
+function readFile (filepath) {
+    return fs.readFileSync(filepath, { encoding: 'utf8' });
+}
+
 function getOldCertsMap () {
     try {
-        const content = fs.readFileSync(path.join(tmpPath, 'certs.json'));
+        const content = readFile(path.join(tmpPath, 'certs.json'));
 
         return JSON.parse(content);
     } catch (e) {
@@ -35,7 +39,7 @@ function getCurrentCertsMap () {
         const certPath = path.join(config.LETS_ENCRYPT_CERTS_PATH, domain, 'privkey.pem');
 
         try {
-            map[domain] = md5(fs.readFileSync(certPath));
+            map[domain] = md5(readFile(certPath));
         } catch (e) {}
 
         return map;
@@ -70,8 +74,8 @@ function checkAndUpdate () {
                 cdn.setDomainServerCertificate({
                     DomainName: domain,
                     ServerCertificateStatus: 'on',
-                    ServerCertificate: fs.readFileSync(path.join(dirPath, 'fullchain.pem')),
-                    PrivateKey: fs.readFileSync(path.join(dirPath, 'privkey.pem'))
+                    ServerCertificate: readFile(path.join(dirPath, 'fullchain.pem')),
+                    PrivateKey: readFile(path.join(dirPath, 'privkey.pem'))
                 }, (err, res) => {
                     if (err) {
                         console.error(new Date(), '更新域名错误：', err);
