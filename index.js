@@ -10,12 +10,17 @@ const path = require('path');
 const crypto = require('crypto');
 const aliyun = require('aliyun-sdk');
 const schedule = require('node-schedule');
+const moment = require('moment');
 
 const tmpPath = path.join(__dirname, '.tmp');
 
 // 生成字符串的md5
 function md5 (str) {
     return crypto.createHash('md5').update(str).digest('hex');
+}
+
+function time () {
+    return moment().format('YYYY-MM-DD HH:mm:ss:SSS');
 }
 
 function readFile (filepath) {
@@ -47,7 +52,7 @@ function getCurrentCertsMap () {
 }
 
 function checkAndUpdate () {
-    console.log(new Date(), '开始检查并且更新...');
+    console.log(time(), '开始检查并且更新...');
 
     const currentCertsMap = getCurrentCertsMap();
     const oldCertsMap = getOldCertsMap();
@@ -72,27 +77,28 @@ function checkAndUpdate () {
                 const dirPath = path.join(config.LETS_ENCRYPT_CERTS_PATH, domain);
 
                 cdn.setDomainServerCertificate({
+                    CertName: `${domain}-${time()}`,
                     DomainName: domain,
                     ServerCertificateStatus: 'on',
                     ServerCertificate: readFile(path.join(dirPath, 'fullchain.pem')),
                     PrivateKey: readFile(path.join(dirPath, 'privkey.pem'))
                 }, (err, res) => {
                     if (err) {
-                        console.error(new Date(), '更新域名错误：', err);
+                        console.error(time(), `更新域名（${domain}）错误：`, err);
                     } else {
-                        console.log(new Date(), '成功更新：', res);
+                        console.log(time(), `成功（${domain}）更新：`, res);
                     }
                     resolve();
                 });
             });
         })
     )
-    .then(() => console.log(new Date(), '检查且更新完毕!!!'));
+    .then(() => console.log(time(), '检查且更新完毕!!!'));
 }
 
 // 启动定时任务
 schedule.scheduleJob(config.CRON, () => {
-    console.log(new Date(), '执行定时任务');
+    console.log(time(), '执行定时任务');
     checkAndUpdate();
 });
 

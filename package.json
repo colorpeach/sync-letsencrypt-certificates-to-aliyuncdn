@@ -25,6 +25,7 @@
   "dependencies": {
     "aliyun-sdk": "^1.11.10",
     "dotenv": "^6.1.0",
+    "moment": "^2.22.2",
     "node-schedule": "^1.3.0"
   }
 }
