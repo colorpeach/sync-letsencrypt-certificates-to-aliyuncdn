@@ -12,7 +12,7 @@ const aliyun = require('aliyun-sdk');
 const schedule = require('node-schedule');
 const moment = require('moment');
 
-const tmpPath = path.join(__dirname, '.tmp');
+const tmpJsonPath = path.join(__dirname, 'tmp.json');
 
 // 生成字符串的md5
 function md5 (str) {
@@ -29,7 +29,7 @@ function readFile (filepath) {
 
 function getOldCertsMap () {
     try {
-        const content = readFile(path.join(tmpPath, 'certs.json'));
+        const content = readFile(tmpJsonPath);
 
         return JSON.parse(content);
     } catch (e) {
@@ -94,6 +94,9 @@ function checkAndUpdate () {
         })
     )
     .then(() => console.log(time(), '检查且更新完毕!!!'));
+
+    // 写入新的缓存文件
+    fs.writeFileSync(tmpJsonPath, JSON.stringify(currentCertsMap));
 }
 
 // 启动定时任务
